@@ -1,9 +1,0 @@
-{
-  "schema": "tutbooks.index.v1",
-  "books": [
-    {
-      "id": "example:getting-started",
-      "path": "tutbooks/books/example.book.json"
-    }
-  ]
-}
