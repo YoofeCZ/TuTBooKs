@@ -1,8 +1,8 @@
 {
-    "Group": "Example",
-    "Name": "ExamplePlugin",
+    "Group": "TuTBooks",
+    "Name": "TuTBooks",
     "Version": "0.0.2",
-    "Description": "An example plugin for HyTale!",
+    "Description": "Tutorial book framework for Hytale mods and modpacks.",
     "Authors": [
         {
             "Name": "It's you!"
@@ -17,6 +17,6 @@
         
     },
     "DisabledByDefault": false,
-    "Main": "org.example.plugin.ExamplePlugin",
+    "Main": "org.example.tutbooks.TutBooksPlugin",
     "IncludesAssetPack": true
 }

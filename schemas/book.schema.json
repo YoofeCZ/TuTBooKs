@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tutbooks.schema/book.v1.json",
+  "title": "TuTBooks Book",
+  "type": "object",
+  "required": ["schema", "id", "title", "version", "pages"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": { "const": "tutbooks.book.v1" },
+    "id": { "type": "string", "pattern": "^[a-z0-9_.-]+:[a-z0-9_.-]+$" },
+    "title": { "type": "string" },
+    "subtitle": { "type": "string" },
+    "author": { "type": "string" },
+    "version": { "type": "string" },
+    "mod": { "type": "string" },
+    "lang": { "type": "string" },
+    "theme": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "pageWidth": { "type": "number" },
+        "pageHeight": { "type": "number" },
+        "font": { "type": "string" },
+        "color": { "type": "string" },
+        "accent": { "type": "string" },
+        "headerAlign": { "type": "string", "enum": ["left", "center", "right"] },
+        "footerAlign": { "type": "string", "enum": ["left", "center", "right"] }
+      }
+    },
+    "toc": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["label", "target"],
+        "additionalProperties": false,
+        "properties": {
+          "label": { "type": "string" },
+          "target": {
+            "type": "object",
+            "required": ["page", "anchor"],
+            "additionalProperties": false,
+            "properties": {
+              "page": { "type": "string" },
+              "anchor": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "pages": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/page" }
+    }
+  },
+  "$defs": {
+    "page": {
+      "type": "object",
+      "required": ["id", "blocks"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "header": { "$ref": "#/$defs/headerFooter" },
+        "footer": { "$ref": "#/$defs/headerFooter" },
+        "blocks": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/block" }
+        }
+      }
+    },
+    "headerFooter": {
+      "type": "object",
+      "required": ["text"],
+      "additionalProperties": false,
+      "properties": {
+        "text": { "type": "string" },
+        "align": { "type": "string", "enum": ["left", "center", "right"] }
+      }
+    },
+    "block": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": { "type": "string" },
+        "id": { "type": "string" },
+        "align": { "type": "string", "enum": ["left", "center", "right"] },
+        "style": { "type": "string" },
+        "text": { "type": "string" },
+        "ordered": { "type": "boolean" },
+        "items": { "type": "array", "items": { "type": "string" } },
+        "src": { "type": "string" },
+        "alt": { "type": "string" },
+        "width": { "type": "number" },
+        "height": { "type": "number" },
+        "url": { "type": "string", "format": "uri" },
+        "action": { "$ref": "#/$defs/action" },
+        "cite": { "type": "string" }
+      },
+      "allOf": [
+        { "if": { "properties": { "type": { "const": "title" } } }, "then": { "required": ["text"] } },
+        { "if": { "properties": { "type": { "const": "subtitle" } } }, "then": { "required": ["text"] } },
+        { "if": { "properties": { "type": { "const": "header" } } }, "then": { "required": ["text"] } },
+        { "if": { "properties": { "type": { "const": "paragraph" } } }, "then": { "required": ["text"] } },
+        { "if": { "properties": { "type": { "const": "list" } } }, "then": { "required": ["items"] } },
+        { "if": { "properties": { "type": { "const": "image" } } }, "then": { "required": ["src"] } },
+        { "if": { "properties": { "type": { "const": "link" } } }, "then": { "required": ["text", "url"] } },
+        { "if": { "properties": { "type": { "const": "button" } } }, "then": { "required": ["text", "action"] } },
+        { "if": { "properties": { "type": { "const": "quote" } } }, "then": { "required": ["text"] } }
+      ]
+    },
+    "action": {
+      "type": "object",
+      "required": ["type"],
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "type": { "const": "goto" },
+            "page": { "type": "string" },
+            "anchor": { "type": "string" }
+          },
+          "required": ["page", "anchor"]
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "type": { "const": "open_url" },
+            "url": { "type": "string", "format": "uri" }
+          },
+          "required": ["url"]
+        },
+        {
+          "additionalProperties": false,
+          "properties": { "type": { "const": "next_page" } },
+          "required": ["type"]
+        },
+        {
+          "additionalProperties": false,
+          "properties": { "type": { "const": "prev_page" } },
+          "required": ["type"]
+        }
+      ]
+    }
+  }
+}

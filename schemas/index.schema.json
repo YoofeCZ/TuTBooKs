@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tutbooks.schema/index.v1.json",
+  "title": "TuTBooks Index",
+  "type": "object",
+  "required": ["schema", "books"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": { "const": "tutbooks.index.v1" },
+    "books": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "path"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "path": { "type": "string" }
+        }
+      }
+    }
+  }
+}
